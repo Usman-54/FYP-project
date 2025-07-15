@@ -1,0 +1,65 @@
+{% extends 'volunter_base.html' %}
+{% load static %}
+{% block content %}
+<link rel="stylesheet" href="{% static 'css/profile.css' %}">
+
+<div class="container mt-3">
+  <div class="profile-card">
+    <a href="{% url 'edit_profile' %}"  class="btn btn-outline-secondary btn-sm edit-btn">Edit Profile</a>
+    
+    <!-- Profile Image -->
+    <div class="text-center">
+      {% if volunteer.userpic %}
+        <img src="{{ volunteer.userpic.url }}" class="rounded-circle shadow" style="width: 120px; height: 120px;">
+      {% else %}
+        <img src="{% static 'images/default_user.png' %}" class="rounded-circle shadow" style="width: 120px; height: 120px;">
+      {% endif %}
+      <h4 class="mt-3 mb-1">{{ volunteer.user.get_full_name }}</h4>
+      <div class="text-muted" style="font-size: 13px;">Volunteer</div>
+      <div class="text-muted" style="font-size: 13px;">{{ volunteer.user.email }}</div>
+      <div class="text-muted" style="font-size: 13px;">{{ volunteer.status }}</div>
+    </div>
+
+    <!-- Info Blocks -->
+    <div class="row text-center mt-4">
+      <div class="col">
+        <div class="profile-info-label">Registered</div>
+        <div class="profile-info-value">{{ volunteer.regdate }}</div>
+      </div>
+      {% comment %} <div class="col">
+        <div class="profile-info-label">CNIC</div>
+        <div class="profile-info-value">{{ volunteer.Cnic }}</div>
+      </div> {% endcomment %}
+      <div class="col">
+        <div class="profile-info-label">Contact</div>
+        <div class="profile-info-value">{{ volunteer.contact }}</div>
+      </div>
+    </div>
+
+    <!-- Emergency Contact (using contact number here) -->
+    <div class="green-box">
+      {{ volunteer.contact }}
+    </div>
+
+    <!-- About / Disease Section -->
+    <div class="d-flex justify-content-between align-items-center">
+      <div class="section-title">About Me</div>
+        <div class="section-content">
+          {{ volunteer.aboutme|default:"No info provided" }}
+        </div>
+      {% comment %} <a href="#" class="btn btn-sm btn-outline-secondary">Edit</a> {% endcomment %}
+    </div>
+ 
+
+    <!-- Address Section -->
+    <div class="d-flex justify-content-between align-items-center">
+      <div class="section-title">Address</div>
+      <div class="section-content">
+      {{ volunteer.address }}
+      </div>
+      {% comment %} <a href="#" class="btn btn-sm btn-outline-secondary">Edit</a> {% endcomment %}
+    </div>
+    
+  </div>
+</div>
+{% endblock %}

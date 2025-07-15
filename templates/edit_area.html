@@ -1,0 +1,120 @@
+{% extends 'admin_base.html' %}
+{% load static %}
+
+{% block content %}
+<style>
+  input[type="checkbox"] {
+    display: inline-block !important;
+    opacity: 1 !important;
+    pointer-events: auto !important;
+  }
+</style>
+
+<div class="container mt-5">
+  <div class="row">
+    <div class="col-md-10 offset-md-2">
+      <h2 class="mb-4">Edit Donation Area</h2>
+      <div class="card shadow">
+        <div class="card-body">
+          <form method="POST">
+            {% csrf_token %}
+
+            <!-- Debug: Check if volunteers are loading -->
+            <p style="color:red;">Volunteers loaded: {{ volunteers|length }}</p>
+
+            <div class="mb-3">
+              <label for="areaname">Donation Area Name</label>
+              <input type="text" name="areaname" value="{{ area.areaname }}" class="form-control" required>
+            </div>
+
+            <div class="mb-3">
+              <label for="description">Description</label>
+              <textarea name="description" class="form-control">{{ area.description }}</textarea>
+            </div>
+
+            <!-- ✅ Volunteer Checkboxes -->
+            <div class="mb-3">
+              <label>Select Volunteer(s)</label>
+              <div class="border p-3 rounded" style="max-height: 200px; overflow-y: auto;">
+                {% for volunteer in volunteers %}
+                  <div class="form-check">
+                    <input class="form-check-input" type="checkbox" name="volunteers[]" value="{{ volunteer.id }}"
+                      {% if volunteer in area.volunteers.all %}checked{% endif %}>
+                    <label class="form-check-label">
+                      {{ volunteer.user.get_full_name|default:volunteer.user.username }}
+                    </label>
+                  </div>
+                {% empty %}
+                  <p class="text-danger">No volunteers found.</p>
+                {% endfor %}
+              </div>
+            </div>
+
+            <button type="submit" class="btn btn-success">Update</button>
+            <a href="{% url 'manage_area' %}" class="btn btn-secondary">Cancel</a>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
+
+
+{% comment %} 
+{% extends 'admin_base.html' %}
+{% block content %}
+  <div class="container mt-5">
+    <div class="row">
+      <div class="col-md-10 offset-md-2">
+        <h2 class="mb-4">Edit Donation Area</h2>
+        <div class="card shadow">
+          <div class="card-body">
+            <form method="POST">
+              {% csrf_token %}
+
+              <label for="areaname">Area Name</label>
+              <input type="text" name="areaname" value="{{ area.areaname }}" class="form-control" required>
+
+              <label for="description">Description</label>
+              <textarea name="description" class="form-control">{{ area.description }}</textarea>
+
+              <label>Select Volunteers</label>
+              <div class="form-group">
+                {% for volunteer in volunteers %}
+                  <div class="form-check">
+                    <input type="checkbox" class="form-check-input" name="volunteers[]" value="{{ volunteer.id }}"
+                          {% if volunteer in area.volunteers.all %}checked{% endif %}>
+                    <label class="form-check-label">{{ volunteer.user.username }}</label>
+                  </div>
+                {% empty %}
+                  <p class="text-danger">No volunteers found.</p>
+                {% endfor %}
+              </div>
+
+
+              <button type="submit" class="btn btn-primary mt-3">Save Changes</button>
+            </form>
+
+
+
+
+            {% comment %} <form method="POST">
+              {% csrf_token %}
+              <div class="mb-3">
+                <label for="id_areaname" class="form-label">Donation Area Name</label>
+                <input type="text" class="form-control" id="id_areaname" name="areaname" value="{{ area.areaname }}" required />
+              </div>
+              <div class="mb-3">
+                <label for="id_description" class="form-label">Description</label>
+                <textarea class="form-control" id="id_description" name="description" rows="4" required>{{ area.description }}</textarea>
+              </div>
+              <button type="submit" class="btn btn-success">Update</button>
+              <a href="{% url 'manage_area' %}" class="btn btn-secondary">Cancel</a>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+{% endblock %} {% endcomment %}

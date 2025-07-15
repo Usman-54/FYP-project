@@ -1,0 +1,154 @@
+{% extends 'admin_base.html' %}
+{% load static %}
+
+{% block content %}
+  <div class="container my-5 p-4 bg-white text-dark rounded shadow" style="max-width: 900px;">
+    <div class="card shadow">
+      <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
+        <h5 class="mb-0">View Donor Detail</h5>
+        <a href="{% url 'manage_donor' %}" class="btn-close btn-close-white" aria-label="Close"></a>
+      </div>
+      <div class="card-body p-0">
+        <!-- Donor Details Section -->
+        <div class="section-title">Donor Details</div>
+        <table class="table table-bordered mb-0">
+          <tbody>
+            <tr>
+              <th>Donor Name</th>
+              <td>{{ donor.user.username }}</td>
+              <th>Donor Contact</th>
+              <td>{{ donor.contact }}</td>
+            </tr>
+            <tr>
+              <th>Email</th>
+              <td>{{ donor.user.email }}</td>
+              <th>Donor PIC</th>
+              <td>
+                {% if donor.userpic %}
+                  <img src="{{ donor.userpic.url }}" class="img-thumbnail" height="60" width="60" />
+                {% else %}
+                  No Image
+                {% endif %}
+              </td>
+            </tr>
+          </tbody>
+        </table>
+
+        <!-- Update and Delete Forms Side-by-Side -->
+        <form method="post" class="p-3" action="{% url 'donor_detail' donor.id %}" enctype="multipart/form-data">
+          {% csrf_token %}
+          <div class="row">
+            <div class="col-md-4">
+              <label for="contact" class="form-label fw-bold">Update Contact</label>
+              <input type="text" name="contact" id="contact" class="form-control" value="{{ donor.contact }}" required />
+            </div>
+            <div class="col-md-4">
+              <label for="userpic" class="form-label fw-bold">Update Profile Image</label>
+              <input type="file" name="userpic" id="userpic" class="form-control" />
+            </div>
+            <div class="col-md-4 d-flex align-items-end justify-content-end gap-2">
+              <!-- Update Button Form -->
+              <button type="submit" class="btn btn-success"><i class="fas fa-edit"></i> Update</button>
+
+              <!-- Delete Button Form -->
+              <form method="post" action="{% url 'delete_item' 'donor' donor.id %}" onsubmit="return confirm('Are you sure you want to delete this donor?');">
+                {% csrf_token %}
+                <button type="submit" class="btn btn-danger"><i class="fas fa-trash-alt"></i> Delete</button>
+              </form>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <style>
+    .section-title {
+      background-color: #fff3cd;
+      color: #d63384;
+      font-weight: bold;
+      padding: 8px;
+      text-align: center;
+      border: 1px solid #ffeeba;
+    }
+    .img-thumbnail {
+      object-fit: cover;
+    }
+  </style>
+{% endblock %}
+
+{% comment %} {% extends 'admin_base.html' %}
+{% load static %}
+
+{% block content %}
+  <div class="container my-5 p-4 bg-white text-dark rounded shadow" style="max-width: 900px;">
+    <div class="card shadow">
+      <div class="card-header bg-primary text-white">
+        <h5 class="mb-0">View Donor Detail</h5>
+      </div>
+      <div class="card-body p-0">
+        <!-- Donor Details Section -->
+        <div class="section-title">Donor Details</div>
+        <table class="table table-bordered mb-0">
+          <tbody>
+            <tr>
+              <th>Donor Name</th>
+              <td>{{ donor.user.username }}</td>
+              <th>Donor Contact</th>
+              <td>{{ donor.contact }}</td>
+            </tr>
+            <tr>
+              <th>Email</th>
+              <td>{{ donor.user.email }}</td>
+              <th>Donor PIC</th>
+              <td>
+                {% if donor.userpic %}
+                  <img src="{{ donor.userpic.url }}" class="img-thumbnail" height="60" width="60" />
+                {% else %}
+                  No Image
+                {% endif %}
+              </td>
+            </tr>
+          </tbody>
+        </table>
+
+        <!-- Update Form -->
+        <form method="post" class="p-3" action="{% url 'donor_detail' donor.id %}" enctype="multipart/form-data">
+          {% csrf_token %}
+          <div class="row">
+            <div class="col-md-4">
+              <label for="contact" class="form-label fw-bold">Update Contact</label>
+              <input type="text" name="contact" id="contact" class="form-control" value="{{ donor.contact }}" required />
+            </div>
+            <div class="col-md-4">
+              <label for="userpic" class="form-label fw-bold">Update Profile Image</label>
+              <input type="file" name="userpic" id="userpic" class="form-control" />
+            </div>
+            <div class="col-md-4 d-flex align-items-end">
+              <button type="submit" class="btn btn-success mt-3"><i class="fas fa-edit"></i> Update</button>
+            </div>
+          </div>
+        </form>
+        <!-- Delete Form -->
+        <form method="post" action="{% url 'delete_item' 'donor' donor.id %}" class="px-3 pb-3" onsubmit="return confirm('Are you sure you want to delete this donor?');">
+          {% csrf_token %}
+          <button type="submit" class="btn btn-danger"><i class="fas fa-trash-alt"></i> Delete</button>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <style>
+    .section-title {
+      background-color: #fff3cd;
+      color: #d63384;
+      font-weight: bold;
+      padding: 8px;
+      text-align: center;
+      border: 1px solid #ffeeba;
+    }
+    .img-thumbnail {
+      object-fit: cover;
+    }
+  </style>
+{% endblock %} {% endcomment %}

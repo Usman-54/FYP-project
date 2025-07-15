@@ -1,0 +1,62 @@
+{% extends 'admin_base.html' %}
+{% load static %}
+
+{% block title %}Edit Admin Profile{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+  <div class="card shadow-lg border-0 p-4 rounded-4">
+    
+    <!-- Header -->
+    <div class="d-flex justify-content-between align-items-center mb-4">
+      <h2 class="mb-0">Edit Profile</h2>
+      <a href="{% url 'profile' %}" class="btn-close btn-close-dark" aria-label="Close"></a>
+    </div>
+
+    <!-- Manual Form -->
+    <form method="POST" enctype="multipart/form-data">
+      {% csrf_token %}
+
+      <div class="row">
+        <!-- First Name -->
+        <div class="col-md-5 mb-3">
+          <label class="form-label">Name</label>
+          <input type="text" name="first_name" value="{{ request.user.first_name }}" class="form-control" required>
+        </div>
+
+        <!-- Email -->
+        <div class="col-md-7 mb-3">
+          <label class="form-label">Email</label>
+          <input type="email" name="email" value="{{ request.user.email }}" class="form-control" required>
+        </div>
+
+        <!-- Contact -->
+        <div class="col-md-5 mb-3">
+          <label class="form-label">Contact</label>
+          <input type="text" name="contact" value="{{ adminprofile.contact }}" class="form-control">
+        </div>
+
+        <!-- Address -->
+        <div class="col-md-7 mb-3">
+          <label class="form-label">Address</label>
+          <textarea name="address" class="form-control" rows="3">{{ adminprofile.address }}</textarea>
+        </div>
+
+        <!-- Profile Image -->
+        <div class="col-md-12 mb-3">
+          <label class="form-label">Profile Image</label><br>
+          {% if adminprofile.adminpic %}
+            <img src="{{ adminprofile.adminpic.url }}" alt="Profile Pic" class="img-thumbnail mb-2" width="120">
+          {% endif %}
+          <input type="file" name="adminpic" class="form-control">
+        </div>
+      </div>
+
+      <div class="text-end">
+        <button type="submit" class="btn btn-success px-4">Save Changes</button>
+      </div>
+    </form>
+
+  </div>
+</div>
+{% endblock %}

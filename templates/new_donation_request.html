@@ -1,0 +1,47 @@
+{% extends 'volunter_base.html' %}
+{% block content %}
+<div class="container mt-5">
+  <h4 class="text-center mb-4">New Donation Requests</h4>
+
+  <!-- Alerts -->
+  {% if messages %}
+    {% for message in messages %}
+      <div class="alert alert-{{ message.tags }}">{{ message }}</div>
+    {% endfor %}
+  {% endif %}
+
+  <div class="card p-3 shadow-sm">
+    <table class="table table-bordered table-striped">
+      <thead class="table-dark">
+        <tr>
+          <th>S/no</th>
+          <th>Area Name</th>
+          <th>Description</th>
+          <th>Creation Date</th>
+          <th>status</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for area in requests %}
+          <tr>
+            <td>{{ forloop.counter }}</td>
+            <td>{{ area.areaname }}</td>
+            <td>{{ area.description }}</td>
+            <td>{{ area.creationdate }}</td>
+            <td>
+              <form method="post">
+                {% csrf_token %}
+                <input type="hidden" name="area_id" value="{{ area.id }}">
+                <button type="submit" name="response" value="accepted" class="btn btn-sm btn-success">Accept</button>
+                <button type="submit" name="response" value="rejected" class="btn btn-sm btn-danger">Reject</button>
+              </form>
+            </td>
+          </tr>
+        {% empty %}
+          <tr><td colspan="5" class="text-center">No donation requests assigned yet.</td></tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+{% endblock %}

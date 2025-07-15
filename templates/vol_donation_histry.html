@@ -1,0 +1,77 @@
+{% extends 'volunter_base.html' %}
+{% load static %}
+
+{% block title %}
+  My Donation History
+{% endblock %}
+
+{% block content %}
+  {% comment %} <div class="my-5 bg-white text-dark rounded shadow" style="margin-left: 250px; width: calc(100% - 250px);"> {% endcomment %}
+  <div class="container my-4 p-2 bg-white text-dark rounded shadow" style="max-width: 900px;">  
+    <h4 class="text-center mb-4">My Assigned Donation Areas</h4>
+
+    <table id="donationTable" class="table table-bordered table-striped mt-4">
+      <thead class="table-dark">
+        <tr>
+          <th>S/No</th>
+          <th>Donation Area Name</th>
+          <th>Description</th>
+          <th>Other Volunteers</th>
+          <th>Creation Date</th>
+          <th>Action</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for area in areas %}
+          <tr>
+            <td>{{ forloop.counter }}</td>
+            <td>{{ area.areaname }}</td>
+            <td>{{ area.description }}</td>
+            <td>
+              {% for v in area.volunteers.all %}
+                {% if v.user != user %}
+                  {{ v.user.get_full_name|default:v.user.username }}{% if not forloop.last %}, {% endif %}
+                {% endif %}
+              {% empty %}
+                <span class="text-muted">No other volunteers</span>
+              {% endfor %}
+            </td>
+            <td>{{ area.creationdate }}</td>
+            <td class="text-center">
+              <form method="post" action="">
+                {% csrf_token %}
+                <input type="hidden" name="area_id" value="{{ area.id }}" />
+                <button type="submit" class="btn btn-sm btn-danger" title="Remove Self" onclick="return confirm('Are you sure you want to remove yourself from this area?');"><i class="fas fa-trash-alt"></i></button>
+              </form>
+              
+            </td>
+          </tr>
+        {% empty %}
+          <tr>
+            <td colspan="6" class="text-center">You are not assigned to any donation area.</td>
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+
+  <!-- DataTables Scripts -->
+  <script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
+  <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
+  <script src="https://cdn.datatables.net/buttons/2.4.1/js/dataTables.buttons.min.js"></script>
+  <script src="https://cdn.datatables.net/buttons/2.4.1/js/buttons.html5.min.js"></script>
+  <script src="https://cdn.datatables.net/buttons/2.4.1/js/buttons.print.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.7/pdfmake.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.7/vfs_fonts.js"></script>
+
+  <script>
+    $(document).ready(function () {
+      $('#donationTable').DataTable({
+        dom: '<"row"<"col-md-6"B><"col-md-6 text-end"f>>rtip',
+        buttons: ['copy', 'excel', 'csv', 'pdf'],
+        pageLength: 6
+      })
+    })
+  </script>
+{% endblock %}

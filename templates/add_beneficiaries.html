@@ -1,0 +1,73 @@
+{% extends base_template %}
+{% load static %}
+
+{% block content %}
+  <div class="container">
+    <div class="row justify-content-center">
+      <div class="col-md-8 border rounded mt-4 shadow bg-white">
+        <form method="post" action="{% url 'add_beneficiaries' %}" class="p-4">
+          {% csrf_token %}
+          <div class="card-header bg-primary text-white text-center py-3 rounded-top">
+            <h2 class="mb-0">Add Beneficiary</h2>
+          </div>
+
+          <div class="card-body">
+            <!-- Row 1: Full Name and Contact -->
+            <div class="row my-3 ">
+              <div class="col">
+                <label for="id_full_name" class="form-label">Full Name</label>
+                <input type="text" name="full_name" id="id_full_name" class="form-control" required />
+              </div>
+              <div class="col">
+                <label for="id_father_name" class="form-label">Father Name</label>
+                <input type="text" name="father_name" id="idfather_name" class="form-control" required />
+              </div>
+            </div>
+
+            <!-- Row 2: CNIC and Family Members -->
+            <div class="row mb-3">
+              <div class="col">
+                <label for="id_contact_number" class="form-label">Contact Number</label>
+                <input type="text" name="contact_number" id="id_contact_number" class="form-control" required />
+              </div>
+              <div class="col">
+                <label for="id_cnic" class="form-label">CNIC</label>
+                <input type="text" name="cnic" id="id_cnic" class="form-control" />
+              </div>
+            </div>
+            <div class="row mb-3">
+              <div class="col">
+                <label for="id_family_members" class="form-label">Family Members</label>
+                <input type="number" name="family_members" id="id_family_members" class="form-control" />
+              </div>
+              <div class="col">
+                <label for="id_status" class="form-label">Status</label>
+                <select name="status" id="id_status" class="form-control" required>
+                  <option value="Widow">Widow</option>
+                  <option value="Orphan">Orphan</option>
+                  <option value="Poor">Poor</option>
+                </select>
+              </div>
+            </div>
+
+            <!-- Address -->
+            <div class="form-group mb-4">
+              <label for="id_address" class="form-label">Address</label>
+              <textarea name="address" id="id_address" rows="3" class="form-control" required></textarea>
+            </div>
+
+            <!-- Submit -->
+            <div class="d-grid">
+              <button type="submit" class="btn btn-success btn-lg">Add Beneficiary</button>
+            </div>
+          </div>
+        </form>
+
+        <!-- Back Button -->
+        <div class="text-center mb-4">
+          <a href="{% url 'beneficiaries' %}" class="btn btn-outline-primary mt-2">Back to Beneficiaries</a>
+        </div>
+      </div>
+    </div>
+  </div>
+{% endblock %}

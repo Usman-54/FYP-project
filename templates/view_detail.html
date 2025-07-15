@@ -1,0 +1,99 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+  <div class="container mt-5">
+    <div class="card shadow">
+      <div class="card-header bg-primary text-white">
+        <h5 class="mb-0">View Donation Detail</h5>
+      </div>
+      <div class="card-body p-0">
+        <!-- Donor Details Section -->
+        <div class="section-title">Donor Details</div>
+        <table class="table table-bordered mb-0">
+          <tbody>
+            <tr>
+              <th>Donor Name</th>
+              <td>{{ donation.donor.username }}</td>
+              <th>Donor Contact</th>
+              <td>{{ donor_profile.contact }}</td>
+            </tr>
+            <tr>
+              <th>Email</th>
+              <td>{{ donation.donor.email }}</td>
+              <th>Donor PIC</th>
+              <td>
+                {% if donor_profile and donor_profile.userpic %}
+                  <img src="{{ donor_profile.userpic.url }}" class="img-thumbnail" height="60" width="60" />
+                {% else %}
+                  No Image
+                {% endif %}
+              </td>
+            </tr>
+          </tbody>
+        </table>
+
+        <!-- Donation Details Section -->
+        <div class="section-title mt-3">Donation Details</div>
+        <table class="table table-bordered">
+          <tbody>
+            <tr>
+              <th>Donation Name</th>
+              <td>{{ donation.donation_type }}</td>
+              <th>Donation PIC</th>
+              <td>
+                {% if donation.donation_image %}
+                  <img src="{{ donation.donation_image.url }}" class="img-thumbnail" height="60" width="60" />
+                {% else %}
+                  No Image
+                {% endif %}
+              </td>
+            </tr>
+            <tr>
+              <th>Collection Location</th>
+              <td>{{ donation.collection_address }}</td>
+              <th>Donation Date</th>
+              <td>{{ donation.submitted_at }}</td>
+            </tr>
+          </tbody>
+        </table>
+         {% if donation.status == "Pending" %}
+      <form method="post" class="p-3" action="{% url 'view_detail' donation.id %}">
+        {% csrf_token %}
+        <div class="row">
+          <div class="col-md-4">
+            <label for="status" class="form-label fw-bold">Change Status</label>
+            <select name="status" id="status" class="form-select" required>
+              <option value="">Select</option>
+              <option value="Accepted">Accept</option>
+              <option value="Rejected">Reject</option>
+            </select>
+          </div>
+          <div class="col-md-4 d-flex align-items-end">
+            <button type="submit" class="btn btn-success mt-3">Update</button>
+          </div>
+        </div>
+      </form>
+      {% else %}
+      <div class="alert alert-info m-3">
+        Status: <strong>{{ donation.status }}</strong>
+      </div>
+      {% endif %}
+      </div>
+    </div>
+  </div>
+
+  <style>
+    .section-title {
+      background-color: #fff3cd;
+      color: #d63384;
+      font-weight: bold;
+      padding: 8px;
+      text-align: center;
+      border: 1px solid #ffeeba;
+    }
+    .img-thumbnail {
+      object-fit: cover;
+    }
+  </style>
+{% endblock %}

@@ -1,0 +1,37 @@
+
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Payment Result{% endblock %}
+
+{% block content %}
+<div class="container mt-5 p-4 bg-white rounded shadow-sm" style="max-width: 600px;">
+  <h3 class="text-center mb-4">Payment Status</h3>
+
+  {% if donation.payment_status == 'Paid' %}
+    <div class="alert alert-success">
+      <strong>Thank you!</strong> Your payment was successful.
+    </div>
+  {% elif donation.payment_status == 'Failed' %}
+    <div class="alert alert-danger">
+      <strong>Payment Failed!</strong> Unfortunately, your payment was not successful.
+    </div>
+  {% else %}
+    <div class="alert alert-warning">
+      <strong>Status:</strong> {{ donation.payment_status }}
+    </div>
+  {% endif %}
+
+  <ul class="list-group mt-4">
+    <li class="list-group-item"><strong>Donation Type:</strong> {{ donation.donation_type }}</li>
+    <li class="list-group-item"><strong>Amount:</strong> Rs. {{ donation.amount }}</li>
+    <li class="list-group-item"><strong>Payment Method:</strong> {{ donation.payment_method }}</li>
+    <li class="list-group-item"><strong>Transaction ID:</strong> {{ donation.transaction_id }}</li>
+    <li class="list-group-item"><strong>Status:</strong> {{ donation.payment_status }}</li>
+  </ul>
+
+  <div class="text-center mt-4">
+    <a href="{% url 'donor_dashboard' %}" class="btn btn-primary">Make Another Donation</a>
+  </div>
+</div>
+{% endblock %}

@@ -1,0 +1,121 @@
+{% extends 'volunter_base.html' %}
+{% block content %}
+
+<div class="container mb-5 p-4 bg-white text-dark rounded" style="max-width: 600px;">
+  <div class="card shadow p-4">
+    <h3 class="text-center">Volunteer Dashboard</h3>
+    <hr>
+
+    {% if volunteer %}
+      <p><strong>Name:</strong> {{ volunteer.user.username }}</p>
+      <p><strong>Email:</strong> {{ volunteer.user.email }}</p>
+      <p><strong>Contact:</strong> {{ volunteer.contact }}</p>
+      <p><strong>Status:</strong> {{ volunteer.status }}</p>
+    {% else %}
+      <div class="alert alert-warning text-center">
+        You are logged in but not registered as a volunteer.
+      </div>
+    {% endif %}
+  </div>
+</div>
+
+{% endblock %}
+
+
+
+
+
+{% comment %} {% extends 'admin_base.html' %}
+{% load static %}
+
+{% block title %}Volunteer Collection Form{% endblock %}
+
+{% block content %}
+<div class="container mb-5 p-4 bg-white text-dark rounded" style="max-width: 600px;">
+  <h4 class="text-center mb-4">Volunteer Collection Form</h4>
+
+  <form method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+
+    <!-- Donation Type -->
+    <div class="mb-3">
+      <label class="form-label">Donation Type</label>
+      <div id="selectedDonationBox" class="border rounded px-3 py-2 bg-white text-dark" style="cursor: pointer;" data-bs-toggle="collapse" data-bs-target="#donationOptions" aria-expanded="false">
+        -- Select Donation Type --
+      </div>
+
+      <div id="donationOptions" class="collapse mt-2">
+        <div class="form-check">
+          <input class="form-check-input donation-checkbox" type="checkbox" id="clothes" name="donation_type" value="Clothes" />
+          <label class="form-check-label" for="clothes">Clothes</label>
+        </div>
+        <div class="form-check">
+          <input class="form-check-input donation-checkbox" type="checkbox" id="footwear" name="donation_type" value="Footwear" />
+          <label class="form-check-label" for="footwear">Footwear</label>
+        </div>
+        <div class="form-check">
+          <input class="form-check-input donation-checkbox" type="checkbox" id="food" name="donation_type" value="Food" />
+          <label class="form-check-label" for="food">Food</label>
+        </div>
+        <div class="form-check">
+          <input class="form-check-input donation-checkbox" type="checkbox" id="books" name="donation_type" value="Books" />
+          <label class="form-check-label" for="books">Books</label>
+        </div>
+        <div class="form-check">
+          <input class="form-check-input donation-checkbox" type="checkbox" id="toys" name="donation_type" value="Toys" />
+          <label class="form-check-label" for="toys">Toys</label>
+        </div>
+        <div class="form-check">
+          <input class="form-check-input donation-checkbox" type="checkbox" id="other" name="donation_type" value="Other" />
+          <label class="form-check-label" for="other">Other</label>
+        </div>
+      </div>
+    </div>
+
+    <!-- Volunteer Upload Proof (Image) -->
+    <div class="mb-3">
+      <label for="donationImage" class="form-label">Collected Item Image (Proof)</label>
+      <input type="file" class="form-control" id="donationImage" name="donation_image" />
+    </div>
+
+    <!-- Address -->
+    <div class="mb-3">
+      <label for="collectionAddress" class="form-label">Collection Address</label>
+      <input type="text" class="form-control" id="collectionAddress" name="collection_address" placeholder="Where the donation was collected from" required />
+    </div>
+
+    <!-- Volunteer Note -->
+    <div class="mb-3">
+      <label for="description" class="form-label">Remarks / Notes</label>
+      <textarea class="form-control" id="description" name="description" rows="3" placeholder="Any notes regarding the collection..."></textarea>
+    </div>
+
+    <!-- Submit Button -->
+    <div class="text-center">
+      <button type="submit" class="btn btn-success px-4">Submit Collection</button>
+    </div>
+  </form>
+</div>
+
+<script>
+  const checkboxes = document.querySelectorAll('.donation-checkbox')
+  const selectedBox = document.getElementById('selectedDonationBox')
+
+  checkboxes.forEach((checkbox) => {
+    checkbox.addEventListener('change', () => {
+      const selected = Array.from(checkboxes)
+        .filter((cb) => cb.checked)
+        .map((cb) => cb.value)
+      selectedBox.innerText = selected.length > 0 ? selected.join(', ') : '-- Select Donation Type --'
+    })
+  })
+</script>
+
+{% if messages %}
+  <script>
+    {% for message in messages %}
+      alert("{{ message|escapejs }}");
+    {% endfor %}
+  </script>
+{% endif %}
+{% endblock %} {% endcomment %}

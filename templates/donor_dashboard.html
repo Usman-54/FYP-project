@@ -1,0 +1,130 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}
+  Donate Now
+{% endblock %}
+
+{% block content %}
+  <div class="container mb-5 p-4 bg-white text-dark rounded" style="max-width: 600px;">
+    <h4 class="text-center mb-4">Donate Now</h4>
+
+    <form method="post" enctype="multipart/form-data">
+      {% csrf_token %}
+
+      <!-- Donation Name Dropdown -->
+      <div class="mb-3">
+        <label class="form-label">Donation Type</label>
+        <div id="selectedDonationBox" class="border rounded px-3 py-2 bg-white text-dark" style="cursor: pointer;" data-bs-toggle="collapse" data-bs-target="#donationOptions" aria-expanded="false">-- Select Donation Type --</div>
+
+        <div id="donationOptions" class="collapse mt-2">
+            <div class="form-check">
+                <input class="form-check-input donation-checkbox" type="checkbox" id="money" name="donation_type" value="Money" />
+                <label class="form-check-label" for="money">Money</label>
+            </div>
+            <div id="moneyForm" class="border rounded p-3 mt-3 bg-light" style="display: none;">
+            <div class="mb-3">
+                <label for="amount" class="form-label">Enter Amount (PKR)</label>
+                <input type="number" class="form-control" id="amount" name="amount" placeholder="Enter donation amount">
+            </div>
+
+            <div class="mb-3">
+                <label for="payment_method" class="form-label">Select Payment Method</label>
+                <select class="form-control" name="payment_method" id="payment_method">
+                <option value="">-- Select Method --</option>
+                <option value="JazzCash">JazzCash</option>
+                <option value="EasyPaisa">EasyPaisa</option>
+                <option value="Meezan Bank">Meezan Bank</option>
+                </select>
+            </div>
+            </div>
+
+          <div class="form-check">
+            <input class="form-check-input donation-checkbox" type="checkbox" id="clothes" name="donation_type" value="Clothes" />
+            <label class="form-check-label" for="clothes">Clothes</label>
+          </div>
+          <div class="form-check">
+            <input class="form-check-input donation-checkbox" type="checkbox" id="footwear" name="donation_type" value="Footwear" />
+            <label class="form-check-label" for="footwear">Footwear</label>
+          </div>
+          <div class="form-check">
+            <input class="form-check-input donation-checkbox" type="checkbox" id="food" name="donation_type" value="Food" />
+            <label class="form-check-label" for="food">Food</label>
+          </div>
+          <div class="form-check">
+            <input class="form-check-input donation-checkbox" type="checkbox" id="books" name="donation_type" value="Books" />
+            <label class="form-check-label" for="books">Books</label>
+          </div>
+          <div class="form-check">
+            <input class="form-check-input donation-checkbox" type="checkbox" id="toys" name="donation_type" value="Toys" />
+            <label class="form-check-label" for="toys">Toys</label>
+          </div>
+          <div class="form-check">
+            <input class="form-check-input donation-checkbox" type="checkbox" id="other" name="donation_type" value="Other" />
+            <label class="form-check-label" for="other">Other</label>
+          </div>
+        </div>
+      </div>
+
+      <!-- Upload Image -->
+      <div class="mb-3">
+        <label for="donationImage" class="form-label">Donation Image</label>
+        <input type="file" class="form-control" id="donationImage" name="donation_image" />
+      </div>
+
+      <!-- Address -->
+      <div class="mb-3">
+        <label for="collectionAddress" class="form-label">Donation Collection Address</label>
+        <input type="text" class="form-control" id="collectionAddress" name="collection_address" placeholder="Enter Full Address" required />
+      </div>
+
+      <!-- Special Note -->
+      <div class="mb-3">
+        <label for="description" class="form-label">Description (Special Note)</label>
+        <textarea class="form-control" id="description" name="description" rows="3" placeholder="Special note for donation (if any)"></textarea>
+      </div>
+
+      <!-- Submit Button -->
+      <div class="text-center">
+        <button type="submit" class="btn btn-danger px-4">Donate Happiness</button>
+      </div>
+    </form>
+  </div>
+
+  <script>
+    const checkboxes = document.querySelectorAll('.donation-checkbox')
+    const selectedBox = document.getElementById('selectedDonationBox')
+    
+    checkboxes.forEach((checkbox) => {
+      checkbox.addEventListener('change', () => {
+        const selected = Array.from(checkboxes)
+          .filter((cb) => cb.checked)
+          .map((cb) => cb.value)
+        selectedBox.innerText = selected.length > 0 ? selected.join(', ') : '-- Select Donation Type --'
+      })
+    })
+  </script>
+  {% if messages %}
+    <script>
+    {% for message in messages %}
+      alert("{{ message|escapejs }}");
+    {% endfor %}
+  </script>
+  {% endif %}
+  <script>
+    const moneyCheckbox = document.getElementById('money');
+    const moneyForm = document.getElementById('moneyForm');
+
+    moneyCheckbox.addEventListener('change', () => {
+        if (moneyCheckbox.checked) {
+        moneyForm.style.display = 'block';
+        } else {
+        moneyForm.style.display = 'none';
+        // Optional: Clear input if unchecked
+        document.getElementById('amount').value = '';
+        document.getElementById('payment_method').value = '';
+        }
+    });
+    </script>
+
+{% endblock %}

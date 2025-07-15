@@ -1,0 +1,131 @@
+body {
+    margin: 0;
+    padding: 0;
+    font-family: 'Segoe UI', sans-serif;
+    background: linear-gradient(to right, #6a11cb, #2575fc);
+    color: white;
+}
+
+.sidebar {
+    height: 100vh;
+    width: 250px;
+    position: fixed;
+    overflow: visible;
+    top: 0;
+    left: -250px; /* Initially hide the sidebar off-screen */
+    background-color: white;
+    color: #333;
+    padding: 20px 15px;
+    transition: left 0.3s ease; /* Animate the 'left' property */
+    z-index: 1000; /* Ensure it's above content but below header */
+}
+
+.sidebar.show-sidebar {
+    left: 0; /* Show the sidebar */
+}
+
+.sidebar .brand {
+    font-weight: bold;
+    font-size: 1rem;
+    color: #3a3a3a;
+    margin-bottom: 20px;
+}
+
+.sidebar .profile {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.sidebar .profile img {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    margin-bottom: 10px;
+}
+
+.sidebar .nav-link {
+    color: #333;
+    font-weight: 500;
+    padding: 10px 0;
+    display: flex; /* Use flexbox for alignment with icons */
+    align-items: center;
+}
+
+.sidebar .nav-link i {
+    margin-right: 10px; /* Space between icon and text */
+}
+
+.sidebar .nav-link:hover {
+    background-color: #f0f0f0;
+    border-radius: 5px;
+}
+
+.toggle-btn {
+    position: fixed; /* Keep it fixed so it's always accessible */
+    top: 15px; /* Adjust as needed for your header */
+    left: 15px; /* Adjust as needed */
+    z-index: 1150; /* Higher than header and sidebar */
+    background-color: #2575fc;
+    color: white; /* Changed to white for better contrast */
+    padding: 8px 12px;
+    border: none;
+    border-radius: 4px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.content {
+    margin-left: 0; /* Start with no margin */
+    padding: 30px;
+    transition: margin-left 0.3s ease; /* Animate content shift */
+    min-height: 100vh; /* Ensure content takes full height */
+    padding-top: 80px; /* Adjust for fixed header */
+}
+
+/* When sidebar is shown, push content over */
+.content.shifted {
+    margin-left: 250px;
+}
+
+.logout-icon i {
+    color: white; /* You have it as text-primary, consider if you want it white */
+    transition: transform 0.3s ease, color 0.3s ease;
+}
+
+.logout-icon:hover i {
+    color: #ffc107;
+    transform: scale(1.2);
+}
+
+.logout-icon.clicked i {
+    transform: rotate(180deg) scale(1.2);
+}
+
+/* Remove or comment out these conflicting rules for dropdowns */
+.sidebar .dropdown-menu {
+    display: none;
+    position: absolute;
+    z-index: 9999;
+    left: 100%; /* or adjust based on your layout */
+    top: 0;
+  }
+
+.header {
+    width: 100%;
+    height: 60px;
+    background-color: #fff;
+    border-bottom: 1px solid #ddd;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 15px;
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 1100;
+}
+
+.logo-img {
+    height: 40px;
+    width: auto;
+}

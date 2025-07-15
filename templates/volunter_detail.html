@@ -1,0 +1,109 @@
+{% extends 'admin_base.html' %}
+{% load static %}
+
+{% block content %}
+  <div class="container my-5 p-4 bg-white text-dark rounded shadow" style="max-width: 900px;">
+    <div class="card shadow">
+      <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
+        <h5 class="mb-0">View Volunteer Detail</h5>
+        <a href="{% url 'new_volunter' %}" class="btn-close btn-close-white" aria-label="Close"></a>
+      </div>
+      <div class="card-body p-0">
+        <!-- Volunteer Details Section -->
+        <div class="section-title">Volunteer Details</div>
+        <table class="table table-bordered mb-0">
+          <tbody>
+            <tr>
+              <th>Volunteer Name</th>
+              <td>{{ volunteer.user.username }}</td>
+              <th>Volunteer Contact</th>
+              <td>{{ volunteer.contact }}</td>
+            </tr>
+            <tr>
+              <th>Email</th>
+              <td>{{ volunteer.user.email }}</td>
+              <th>Volunteer PIC</th>
+              <td>
+                {% if volunteer.userpic %}
+                  <img src="{{ volunteer.userpic.url }}" class="img-thumbnail" height="60" width="60" />
+                {% else %}
+                  No Image
+                {% endif %}
+              </td>
+            </tr>
+            <tr>
+              <th>Address</th>
+              <td colspan="3">{{ volunteer.address }}</td>
+            </tr>
+            <tr>
+              <th>About Me</th>
+              <td colspan="3">{{ volunteer.aboutme }}</td>
+            </tr>
+            <tr>
+              <th>Status</th>
+              <td colspan="3">
+                <span class="badge 
+                  {% if volunteer.status == 'Pending' %}bg-warning text-dark
+                  {% elif volunteer.status == 'Approved' %}bg-success
+                  {% elif volunteer.status == 'Rejected' %}bg-danger
+                  {% else %}bg-secondary{% endif %}
+                ">
+                  {{ volunteer.status }}
+                </span>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+
+        <!-- Update Form -->
+        <form method="post" class="p-3" action="{% url 'volunter_detail' volunteer.id %}" enctype="multipart/form-data">
+          {% csrf_token %}
+          <div class="row">
+            <div class="col-md-4">
+              <label for="contact" class="form-label fw-bold">Update Contact</label>
+              <input type="text" name="contact" id="contact" class="form-control" value="{{ volunteer.contact }}" required />
+            </div>
+
+            <div class="col-md-4">
+              <label for="userpic" class="form-label fw-bold">Update Profile Image</label>
+              <input type="file" name="userpic" id="userpic" class="form-control" />
+            </div>
+
+            <div class="col-md-4">
+              <label for="status" class="form-label fw-bold">Update Status</label>
+              <select name="status" id="status" class="form-select">
+                <option value="Pending" {% if volunteer.status == "Pending" %}selected{% endif %}>Pending</option>
+                <option value="Approved" {% if volunteer.status == "Approved" %}selected{% endif %}>Approved</option>
+                <option value="Rejected" {% if volunteer.status == "Rejected" %}selected{% endif %}>Rejected</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="d-flex justify-content-end gap-2 mt-4">
+            <button type="submit" class="btn btn-success"><i class="fas fa-edit"></i> Update</button>
+
+            <form method="post" action="{% url 'delete_item' 'volunteer' volunteer.id %}" onsubmit="return confirm('Are you sure you want to delete this volunteer?');">
+              {% csrf_token %}
+              <button type="submit" class="btn btn-danger"><i class="fas fa-trash-alt"></i> Delete</button>
+            </form>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <style>
+    .section-title {
+      background-color: #fff3cd;
+      color: #d63384;
+      font-weight: bold;
+      padding: 8px;
+      text-align: center;
+      border: 1px solid #ffeeba;
+    }
+    .img-thumbnail {
+      object-fit: cover;
+    }
+  </style>
+{% endblock %}
+

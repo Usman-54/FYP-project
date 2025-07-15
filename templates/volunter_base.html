@@ -1,0 +1,100 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="csrf-token" content="{{ csrf_token }}" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>
+      {% block title %}
+        Donor Dashboard
+      {% endblock %}
+    </title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+    <link rel="stylesheet" href="https://cdn.datatables.net/buttons/2.4.1/css/buttons.dataTables.min.css" />
+    <link rel="stylesheet" href="{% static 'css/admin_base.css' %}" />
+  </head>
+  <body>
+    <div class="header d-flex align-items-center px-3 bg-white border-bottom">
+      <div class="d-flex align-items-center">
+        <div class="me-3">
+          <button class="toggle-btn me-3" onclick="toggleSidebar()">☰</button>
+        </div>
+        <div class="logo d-flex align-items-center ms-5">
+          <img src="{% static 'images/project_logo.jpg' %}" alt="Logo" class="logo-img ms-2" />
+          <h5 class="mb-0 ms-2">Khairunas Foundation</h5>
+        </div>
+      </div>
+      <div class="ms-auto" onclick="logout()" style="cursor:pointer;">
+        <i class="bi bi-box-arrow-right fs-4 text-primary"></i>
+      </div>
+    </div>
+
+    <div class="sidebar" id="sidebar">
+      <div class="profile">
+        {% if Volunteer.userpic %}
+          <img src="{{ volunteer_profile.userpic.url }}" alt="User Image" class="img-fluid rounded-circle" width="100" height="100" />
+        {% endif %}
+        <h6>Volunter</h6>
+        <p style="font-size: 0.9rem; color: #555;"></p>
+      </div>
+
+      <nav class="nav flex-column">
+        <ul class="nav flex-column">
+          <li class="nav-item">
+            <a href="{% url 'volunter_dashboard' %}" class="nav-link"><i class="bi bi-speedometer2"></i> Dashboard</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="{% url 'new_donation_request' %}"><i class="bi bi-plus-circle-fill"></i> New donation collection</a>
+          </li>
+
+          <li>
+            <a class="nav-link" href="{% url 'vol_donation_histry' %}"><i class="bi bi-clock-history"></i>Donation History</a>
+          </li>
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" id="dropdownBeneficiaries" role="button" data-bs-toggle="dropdown" aria-expanded="false"><i class="bi bi-people-fill"></i>Beneficiaries</a>
+            <ul class="dropdown-menu" aria-labelledby="dropdownBeneficiaries">
+              <li>
+                <a class="dropdown-item" href="{% url 'add_beneficiaries' %}">Add Beneficiaries</a>
+              </li> 
+              <li>
+                <a class="dropdown-item" href="{% url 'beneficiaries' %}">Beneficiaries History</a>
+              </li>
+            </ul>
+          </li>
+          <li>
+            <a class="nav-link" href="{% url 'volunteer_profile' %}"><i class="bi bi-person-circle"></i> Profile</a>
+          </li>
+        </ul>
+      </nav>
+    </div>
+
+    <div class="content">
+      {% block content %}
+
+      {% endblock %}
+    </div>
+    <!-- Bootstrap JS and Popper.js (CDN) -->
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.min.js"></script>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+      function toggleSidebar() {
+        const sidebar = document.getElementById('sidebar')
+        const content = document.querySelector('.content') // Get the content element
+        sidebar.classList.toggle('show-sidebar')
+        content.classList.toggle('shifted') // Toggle the 'shifted' class on content
+      }
+      
+      const logoutUrl = "{% url 'logout' %}"
+      function logout() {
+        window.location.href = logoutUrl
+      }
+    </script>
+
+    {% include 'footer.html' %}
+  </body>
+</html>

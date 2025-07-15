@@ -1,0 +1,79 @@
+{% extends 'admin_base.html' %}
+{% load static %}
+
+{% block title %}
+  Donation History
+{% endblock %}
+
+{% block content %}
+  <div class="my-5 p-4 bg-white text-dark rounded shadow" style="margin-left: 250px; width: calc(100% - 250px);">
+
+  <h4 class="text-center mb-4">Donation History</h4>
+
+    <table id="donationTable" class="table table-bordered table-striped mt-4">
+      <thead class="table-dark">
+        <tr>
+          <th scope="col">S/No</th>
+          <th scope="col">Donation Area Name</th>
+          <th scope="col">discripation</th>
+          <th scope="col">Volunter Name</th>
+          <th scope="col">Creation Date</th>
+          <th scope="col">Action</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for area in areas %}
+          <tr>
+            <td>{{ forloop.counter }}</td>
+            <td>{{ area.areaname }}</td>
+            <td>{{ area.description }}</td>
+            <td>
+              {% for volunteer in area.volunteers.all %}
+                {{ volunteer.user.get_full_name|default:volunteer.user.username }}{% if not forloop.last %}, {% endif %}
+              {% empty %}
+                No Volunteers
+              {% endfor %}
+            </td>
+            <td>{{ area.creationdate }}</td>
+            <td class="text-center">
+              <div class="d-flex justify-content-center align-items-center gap-2">
+                <!-- Edit Button -->
+                <a href="{% url 'edit_item' 'area' area.id %}" class="btn btn-sm btn-primary" title="Edit"><i class="fas fa-edit"></i></a>
+
+                <!-- Delete Form -->
+                <form method="post" action="{% url 'delete_item' 'area' area.id %}" onsubmit="return confirm('Are you sure you want to delete this area?');">
+                  {% csrf_token %}
+                  <button type="submit" class="btn btn-sm btn-danger" title="Delete"><i class="fas fa-trash-alt"></i></button>
+                </form>
+              </div>
+            </td>
+          </tr>
+        {% empty %}
+          <tr>
+            <td colspan="4" class="text-center">No donation records found.</td>
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Scripts (same as before) -->
+  <script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
+  <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
+  <script src="https://cdn.datatables.net/buttons/2.4.1/js/dataTables.buttons.min.js"></script>
+  <script src="https://cdn.datatables.net/buttons/2.4.1/js/buttons.html5.min.js"></script>
+  <script src="https://cdn.datatables.net/buttons/2.4.1/js/buttons.print.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.7/pdfmake.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.7/vfs_fonts.js"></script>
+
+  <script>
+    $(document).ready(function () {
+      $('#donationTable').DataTable({
+        dom: '<"row mb-3"<"col-md-6"B><"col-md-6 text-end"f>>rtip',
+        buttons: ['copy', 'excel', 'csv', 'pdf'],
+        pageLength: 6
+      })
+    })
+  </script>
+{% endblock %}

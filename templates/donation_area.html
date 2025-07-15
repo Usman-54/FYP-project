@@ -1,0 +1,141 @@
+{% extends 'admin_base.html' %}
+{% load static %}
+
+{% block title %}Add Donation Area{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+  <div class="row">
+    <div class="col-md-10 offset-md-1">
+      <h2 class="mb-4 text-center">
+        {% if edit %}Edit Donation Area{% else %}Add Donation Area{% endif %}
+      </h2>
+
+      <div class="card shadow p-4">
+        <form method="POST" id="area-form">
+          {% csrf_token %}
+
+          <!-- Area Name -->
+          <div class="mb-3">
+            <label for="areaname" class="form-label">Area Name</label>
+            <input type="text" name="areaname" id="areaname" class="form-control" required>
+          </div>
+
+          <!-- Description -->
+          <div class="mb-3">
+            <label for="description" class="form-label">Description</label>
+            <textarea name="description" id="description" class="form-control" rows="3" required></textarea>
+          </div>
+
+          <!-- Volunteer Checkboxes -->
+          <div class="mb-4">
+            <label class="form-label">Select Volunteer(s)</label>
+            <div class="border rounded p-3 bg-light" style="max-height: 220px; overflow-y: auto;">
+              {% for volunteer in approved_volunteers %}
+                <div class="form-check mb-2">
+                  <input class="form-check-input volunteer-checkbox" type="checkbox"
+                         value="{{ volunteer.id }}" id="volunteer{{ volunteer.id }}"
+                         name="volunteers"
+                         data-name="{{ volunteer.user.get_full_name|default:volunteer.user.username }}"
+                         data-email="{{ volunteer.user.email }}"
+                         data-contact="{{ volunteer.contact }}"
+                         data-address="{{ volunteer.address }}">
+                  <label class="form-check-label" for="volunteer{{ volunteer.id }}">
+                    {{ volunteer.user.get_full_name|default:volunteer.user.username }}
+                  </label>
+                </div>
+              {% endfor %}
+            </div>
+          </div>
+
+          <!-- Selected Volunteers Preview Box -->
+          <div id="selectedVolunteersBox" class="card shadow-sm p-3 mb-4 d-none">
+            <h5 class="mb-3">Selected Volunteers</h5>
+            <div id="selectedVolunteersList"></div>
+          </div>
+
+          <!-- Form Buttons -->
+          <div class="mb-3 d-flex gap-2">
+            <button type="submit" class="btn btn-success">Submit</button>
+            <a href="{% url 'manage_area' %}" class="btn btn-secondary">Cancel</a>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- JS Script to Show Selected Volunteers -->
+<script>
+  const selectedBox = document.getElementById("selectedVolunteersBox");
+  const selectedList = document.getElementById("selectedVolunteersList");
+
+  document.querySelectorAll(".volunteer-checkbox").forEach(function (checkbox) {
+    checkbox.addEventListener("change", updateSelectedVolunteers);
+  });
+
+  function updateSelectedVolunteers() {
+    selectedList.innerHTML = "";
+    const selected = document.querySelectorAll(".volunteer-checkbox:checked");
+
+    if (selected.length === 0) {
+      selectedBox.classList.add("d-none");
+      return;
+    }
+
+    selectedBox.classList.remove("d-none");
+
+    selected.forEach(function (cb, index) {
+      const name = cb.getAttribute("data-name");
+      const email = cb.getAttribute("data-email") || "N/A";
+      const contact = cb.getAttribute("data-contact") || "N/A";
+      const address = cb.getAttribute("data-address") || "N/A";
+
+      const volunteerCard = `
+        <div class="border rounded p-2 mb-2 bg-white">
+          <strong>${index + 1}. ${name}</strong><br>
+          <small>Email:</small> ${email}<br>
+          <small>Contact:</small> ${contact}<br>
+          <small>Address:</small> ${address}
+        </div>
+      `;
+
+      selectedList.insertAdjacentHTML("beforeend", volunteerCard);
+    });
+  }
+</script>
+{% endblock %}
+
+{% comment %} 
+{% extends 'admin_base.html' %}
+{% block content %}
+<div class="container mt-5">
+  <div class="row">
+    <div class="col-md-10 offset-md-2">
+      <h2 class="mb-4">
+        {% if edit %}Edit Donation Area{% else %}Add Donation Area{% endif %}
+      </h2>
+      <div class="card shadow">
+        <div class="card-body">
+          <form method="POST">
+            {% csrf_token %}
+            <div class="mb-3">
+              <label for="id_areaname" class="form-label">Donation Area Name</label>
+              <input type="text" class="form-control" id="id_areaname" name="areaname"
+                     value="{{ area.areaname|default_if_none:'' }}" required />
+            </div>
+            <div class="mb-3">
+              <label for="id_description" class="form-label">Description</label>
+              <textarea class="form-control" id="id_description" name="description" rows="4" required>{{ area.description|default_if_none:'' }}</textarea>
+            </div>
+            <button type="submit" class="btn btn-success">
+              {% if edit %}Update{% else %}Submit{% endif %}
+            </button>
+            <a href="{% url 'manage_area' %}" class="btn btn-secondary">Cancel</a>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% comment %} {% endcomment %}

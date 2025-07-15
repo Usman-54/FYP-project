@@ -1,0 +1,94 @@
+{% extends 'admin_base.html' %}
+{% load static %}
+
+{% block title %}Admin Dashboard{% endblock %}
+
+{% block content %}
+
+<div class="my-5 p-4 bg-white text-dark rounded shadow mx-auto" style=" width: calc(100%);">  
+  <div class="card shadow-lg border-0 rounded-4">
+    <div class="card-header bg-dark text-white text-center rounded-top-4">
+      <h2 class="mb-0">Welcome Admin</h2>
+    </div>
+   <!-- 🔽 Display temporary comment message here -->
+   {% if comment %}
+      <div class="alert alert-info alert-dismissible fade show mt-4 text-start shadow-sm" role="alert">
+        <h5 class="alert-heading">📩 New Contact Message</h5>
+        <p>{{ comment }}</p>
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+      </div>
+    {% endif %}
+    <!-- 🔼 End of comment block -->
+
+    <div class="card-body bg-light">
+      <div class="row mb-4 text-center">
+
+        <!-- Manage Volunteer -->
+        <div class="col-md-4 mb-3">
+          <div class="card bg-primary text-white shadow-sm rounded-3">
+            <div class="card-body">
+              <i class="fas fa-hands-helping fa-2x mb-2"></i>
+              <h5 class="card-title">Manage Volunteer</h5>
+              <div class="dropdown mt-2">
+                <button class="btn btn-outline-light btn-sm dropdown-toggle" type="button" data-bs-toggle="dropdown">
+                  Go
+                </button>
+                <ul class="dropdown-menu">
+                  <li><a class="dropdown-item" href="{% url 'new_volunter' %}">New Volunteer</a></li>
+                  <li><a class="dropdown-item" href="{% url 'approved_volunter' %}">Approved Volunteer</a></li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Manage Area -->
+        <div class="col-md-4 mb-3">
+          <div class="card bg-success text-white shadow-sm rounded-3">
+            <div class="card-body">
+              <i class="fas fa-map-marked-alt fa-2x mb-2"></i>
+              <h5 class="card-title">Donation Area</h5>
+              <div class="dropdown mt-2">
+                <button class="btn btn-outline-light btn-sm dropdown-toggle" type="button" data-bs-toggle="dropdown">
+                  Go
+                </button>
+                <ul class="dropdown-menu">
+                  <li><a class="dropdown-item" href="{% url 'donation_area' %}">Donation Area</a></li>
+                  <li><a class="dropdown-item" href="{% url 'manage_area' %}">Manage Donation</a></li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Beneficiaries -->
+        <div class="col-md-4 mb-3">
+          <div class="card bg-warning text-dark shadow-sm rounded-3">
+            <div class="card-body">
+              <i class="fas fa-users fa-2x mb-2"></i>
+              <h5 class="card-title">Beneficiaries</h5>
+              <div class="dropdown mt-2">
+                <button class="btn btn-outline-dark btn-sm dropdown-toggle" type="button" data-bs-toggle="dropdown">
+                  Go
+                </button>
+                <ul class="dropdown-menu">
+                  <li><a class="dropdown-item" href="{% url 'add_beneficiaries' %}">Add Beneficiaries</a></li>
+                  <li><a class="dropdown-item" href="{% url 'beneficiaries' %}">Beneficiaries History</a></li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <div class="text-center mt-4">
+        <p class="lead">Use this dashboard to manage volunteers, areas, and view beneficiaries effectively.</p>
+        <a href="{% url 'logout' %}" class="btn btn-danger mt-3">Logout</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+{% endblock %}

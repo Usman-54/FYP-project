@@ -1,0 +1,64 @@
+{% extends 'admin_base.html' %}
+{% load static %}
+
+{% block title %}
+  Edit Beneficiary
+{% endblock %}
+
+{% block content %}
+  <div class="my-5 p-4 bg-white text-dark rounded shadow" style="margin-left: 250px; width: calc(100% - 250px);">
+    <h4 class="text-center mb-4">Edit Beneficiary</h4>
+
+    <form method="post" action="{% url 'edit_item' 'beneficiary' beneficiary.id %}">
+      {% csrf_token %}
+      <div class="row mb-3">
+        <div class="col">
+          <label for="id_full_name" class="form-label">Full Name</label>
+          <input type="text" name="full_name" id="id_full_name" value="{{ beneficiary.full_name }}" class="form-control" required />
+        </div>
+        <div class="col">
+          <label for="id_ffather_name" class="form-label">Father Name</label>
+          <input type="text" name="father_name" id="id_father_name" value="{{ beneficiary.father_name }}" class="form-control" required />
+        </div>
+      </div>
+      <div class="row mb-3">
+        <div class="col">
+          <label for="id_contact_number" class="form-label">Contact Number</label>
+          <input type="text" name="contact_number" id="id_contact_number" value="{{ beneficiary.contact_number }}" class="form-control" required />
+        </div>
+        <div class="col">
+          <label for="id_cnic" class="form-label">CNIC</label>
+          <input type="text" name="cnic" id="id_cnic" value="{{ beneficiary.cnic }}" class="form-control" />
+        </div>
+      </div>
+
+      <div class="row mb-3">
+        <div class="col">
+          <label for="id_family_members" class="form-label">Family Members</label>
+          <input type="number" name="family_members" id="id_family_members" value="{{ beneficiary.family_members }}" class="form-control" />
+        </div>
+        <div class="col">
+          <label for="id_status" class="form-label">Status</label>
+          <select name="status" id="id_status" value="{{ beneficiary.status }}" class="form-control" required>
+            <option value="Widow">Widow</option>
+            <option value="Orphan">Orphan</option>
+            <option value="Poor">Poor</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="form-group mb-4">
+        <label for="id_address" class="form-label">Address</label>
+        <textarea name="address" id="id_address" rows="3" class="form-control" required>{{ beneficiary.address }}</textarea>
+      </div>
+
+      <div class="d-grid">
+        <button type="submit" class="btn btn-success btn-lg">Update Beneficiary</button>
+      </div>
+    </form>
+
+    <div class="text-center mt-4">
+      <a href="{% url 'beneficiaries' %}" class="btn btn-outline-primary">Back to Beneficiaries</a>
+    </div>
+  </div>
+{% endblock %}
