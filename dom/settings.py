@@ -26,9 +26,10 @@ pymysql.install_as_MySQLdb()
 SECRET_KEY = 'django-insecure-_@#8nosio1u&ldu%fzsz3w510p*okrwe4ed9*i!xilu_($5j(j'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
+ALLOWED_HOSTS = ['127.0.0.1', 'localhost', 'usman54.pythonanywhere.com']
 
-ALLOWED_HOSTS = []
+
 
 
 # Application definition
